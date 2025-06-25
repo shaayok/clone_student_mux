@@ -5,7 +5,7 @@ import { getLessonDetails } from '../../service/lesson.service';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { toast } from 'react-toastify';
 
-export default function VideoPanel({ selectedLesson }) {
+export default function VideoPanel({ selectedLesson, dataType, demoVideoListObject }) {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,20 +16,27 @@ export default function VideoPanel({ selectedLesson }) {
     if (selectedLesson?.id) {
       setLoading(true);
       setError(null);
-      getLessonDetails(selectedLesson.id)
-        .then(list => {
-          if (!cancelled) setVideos(list);
-        })
-        .catch(() => {
-          if (!cancelled) {
-            setError('Video’s laden mislukt');
-            toast.error('Video’s laden mislukt');
-          }
-          if (!cancelled) setError('Video’s laden mislukt');
-        })
-        .finally(() => {
-          if (!cancelled) setLoading(false);
-        });
+      if (dataType === 'real') {
+        getLessonDetails(selectedLesson.id)
+          .then(list => {
+            console.log("get data by video id: ",list);
+            if (!cancelled) setVideos(list);
+          })
+          .catch(() => {
+            if (!cancelled) {
+              setError('Video’s laden mislukt');
+              toast.error('Video’s laden mislukt');
+            }
+            if (!cancelled) setError('Video’s laden mislukt');
+          })
+          .finally(() => {
+            if (!cancelled) setLoading(false);
+          });
+      }
+      else{
+        setVideos(demoVideoListObject)
+      }
+
     } else {
       setVideos([]);
     }
