@@ -23,8 +23,7 @@ export async function getAllLessons() {
     console.log(lessonsArray);
     
     if (!Array.isArray(lessonsArray) || lessonsArray.length === 0) {
-      return [];
-      //throw new Error("No lessons found");
+      throw new Error("No lessons found");
     }
 
     return lessonsArray.map((lesson) => ({

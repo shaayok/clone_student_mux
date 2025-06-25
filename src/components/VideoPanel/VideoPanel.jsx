@@ -5,57 +5,36 @@ import { getLessonDetails } from '../../service/lesson.service';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { toast } from 'react-toastify';
 
-export default function VideoPanel({ selectedLesson, isDemo, demoVideos }) {
+export default function VideoPanel({ selectedLesson }) {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalVideo, setModalVideo] = useState(null);
-  console.log('-- demoVideos length:', demoVideos.length);
 
   useEffect(() => {
     let cancelled = false;
-
-    const fetchData = async () => {
-      if (selectedLesson?.id) {
-        setLoading(true);
-        setError(null);
-
-        if (!isDemo) {
-          try {
-            const list = await getLessonDetails(selectedLesson.id);
-            console.log("get data by video id: ", list);
-
-            if (cancelled) return;
-
-            if (Array.isArray(list) && list.length > 0) {
-              setVideos(list);
-            } else {
-              setVideos(demoVideos); // fallback
-            }
-          } catch (error) {
-            if (!cancelled) {
-              setError('Video’s laden mislukt');
-              toast.error('Video’s laden mislukt');
-            }
-          } finally {
-            if (!cancelled) setLoading(false);
+    if (selectedLesson?.id) {
+      setLoading(true);
+      setError(null);
+      getLessonDetails(selectedLesson.id)
+        .then(list => {
+          if (!cancelled) setVideos(list);
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setError('Video’s laden mislukt');
+            toast.error('Video’s laden mislukt');
           }
-        } else {
-          setVideos(demoVideos);
-          setLoading(false);
-        }
-      } else {
-        setVideos([]);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedLesson, isDemo, demoVideos]);
-
+          if (!cancelled) setError('Video’s laden mislukt');
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    } else {
+      setVideos([]);
+    }
+    return () => { cancelled = true };
+  }, [selectedLesson]);
 
   if (!selectedLesson) {
     return (
