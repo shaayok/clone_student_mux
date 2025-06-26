@@ -47,7 +47,7 @@ const VideoModal = ({ video, onClose }) => {
           </div>
 
           <div className={styles.analysisContainer}>
-            {/* AI-analyse van de video komt hier */}
+            {video.analysis}
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ export default function VideoPanel({ selectedLesson, dataType, demoVideoListObje
 
   useEffect(() => {
     let cancelled = false;
+    console.log("selectedLessonselectedLessonselectedLessonselectedLesson",selectedLesson?.id);
     if (selectedLesson?.id) {
       setLoading(true);
       setError(null);
@@ -34,7 +35,9 @@ export default function VideoPanel({ selectedLesson, dataType, demoVideoListObje
           });
       }
       else{
-        setVideos(demoVideoListObject)
+        console.log("demoVideoListObjectdemoVideoListObject",demoVideoListObject);
+        if (!cancelled) setVideos(demoVideoListObject)
+          setLoading(false);
       }
 
     } else {

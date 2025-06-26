@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import { useAuth } from '../../hooks/useAuth';
 
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,18 +16,19 @@ export default function Login() {
     setError('');
     try {
       await login({ email, password });
+      //setShowProposalModal(true);
       navigate('/dashboard', { replace: true });
     } catch (e) {
       console.log(e);
-      
+
       setError('Ongeldige gebruikersnaam of wachtwoord.');
     }
   };
 
   return (
-    <div className={styles.container}>
+    <><div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h2 style={{"fontWeight":"700px"}}><strong>Inloggen bij EduCapture </strong> 
+        <h2 style={{ "fontWeight": "700px" }}><strong>Inloggen bij EduCapture </strong>
         </h2>
         {error && <div className={styles.error}>{error}</div>}
         <label>
@@ -51,6 +53,9 @@ export default function Login() {
           {loading ? 'Bezig…' : 'Log in'}
         </button>
       </form>
+
     </div>
+
+    </>
   );
 }
