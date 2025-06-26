@@ -4,9 +4,6 @@ import styles from './VideoModal.module.css';
 
 const VideoModal = ({ video, onClose }) => {
   if (!video) return null;
-
-  console.log("videovideovideovideovideovideo",video);
-
   // video.playbackId comes from Mux after you upload via their API
   // const { playbackId, timestamp } = video;
   const playbackId = video.url;  
