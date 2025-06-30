@@ -30,12 +30,9 @@ export async function acceptNda() {
   const response = await fetchAPI(`${BASE_URL}/api/nda`)
 
   const result = await handleResponse(response);
-  console.log("acceptNda::result: ", result);
 
   const status = result?.data?.status
   const message = result?.data?.message
-
-  console.log(status, message);
 
   if (!message || message !== "NDA signed successfully.")
     throw new Error("NDA signing failure");
