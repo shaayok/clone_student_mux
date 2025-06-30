@@ -14,6 +14,7 @@ export async function login({ email, password }) {
 
   const token = result.data?.data?.token;
   const userId = result.data?.data?.loggedInUserId;
+  const ndaSigned = result.data?.data?.ndaSigned;
 
   console.log("TOKEN:", token);
   console.log("USER ID:", userId);
@@ -22,10 +23,25 @@ export async function login({ email, password }) {
     throw new Error('Login failed: token not found');
   }
 
-  return { token, userId };
+  return { token, userId, ndaSigned };
 }
 
+export async function acceptNda() {
+  const response = await fetchAPI(`${BASE_URL}/api/nda`)
 
+  const result = await handleResponse(response);
+  console.log("acceptNda::result: ", result);
+
+  const status = result?.data?.status
+  const message = result?.data?.message
+
+  console.log(status, message);
+
+  if (!message || message !== "NDA signed successfully.")
+    throw new Error("NDA signing failure");
+
+  return { status };
+}
 
 export function logout() {
   localStorage.removeItem('authToken');

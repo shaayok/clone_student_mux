@@ -11,11 +11,13 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (credentials) => {
     setLoading(true);
     try {
-      const { token } = await authAPI.login(credentials);
-      console.log(token);
+      const { token, ndaSigned } = await authAPI.login(credentials);
+      console.log(token, ndaSigned);
 
       storage.setToken(token);
       setToken(token);
+
+      return { ndaSigned };
     } catch (error) {
       throw error;
     } finally {
@@ -28,6 +30,17 @@ export function AuthProvider({ children }) {
     setToken(null);
   }, []);
 
+  const acceptNda = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { status } = await authAPI.acceptNda();
+    } catch (error) {
+      throw error
+    } finally {
+      setLoading(false);
+    }
+  }, [token])
+
   useEffect(() => {
     const existingToken = storage.getToken();
     if (existingToken) {
@@ -36,7 +49,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, loading }}>
+    <AuthContext.Provider value={{ token, login, logout, loading, acceptNda }}>
       {children}
     </AuthContext.Provider>
   );
