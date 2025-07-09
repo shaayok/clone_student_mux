@@ -32,7 +32,7 @@ export async function getAllLessons() {
       videos: lesson.videos,
       date: new Date(lesson.date),
       start: new Date(lesson.start_time),
-      end: new Date(lesson.end_time),
+      end: new Date(lesson.end_time)
     }));
   } catch (error) {
     console.error("Error fetching lessons:", error.message);
@@ -65,6 +65,7 @@ export async function getLessonDetails(id) {
   return lesson.videos.map(v => ({
     id: v.video_name,
     name: v.video_name,
-    url: v.video_url
+    url: v.video_url,
+    analysis: v.analysis
   }));
 }
